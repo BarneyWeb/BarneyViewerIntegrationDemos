@@ -41,6 +41,35 @@
 			Barney.onReady(() => {
 
 				/* -------------------------
+					CONFIG
+				------------------------- */
+
+				/**
+				 * Set to "true" if you want the message to reappear
+				 * everytime the user stop interacting with the viewer
+				 */
+				const INTERACTION_PROMPT_ONLY_ONCE = false
+
+				/**
+				 * Delay to restart the turntable animation after
+				 * the last user interaction.
+				 */
+				const AUTOROTATE_DELAY = 1000
+
+				/**
+				 * Speed of the zoom on pressing the button once 
+				 */
+				const ZOOM_CLICK_SPEED = 3
+
+				/**
+				 * Speed if we keep pressing the button. It's important to
+				 * use per-second calcs to have consistent behavior on every
+				 * device whatever its screen refresh rate (60hz, 144hz...)
+				 */
+				const ZOOM_PRESS_SPEED_PER_SECOND = 15
+
+
+				/* -------------------------
 					DOM
 				------------------------- */
 
@@ -71,7 +100,7 @@
 						// Enable turntable animation
 						'autorotate': true,
 						// But change the "restart delay" to 1 second
-						'autorotate-delay': 1000,
+						'autorotate-delay': AUTOROTATE_DELAY,
 
 						// Mouse wheel won't block the scroll and don't show any message
 						'mouse': 'cooperative-silent',
@@ -100,8 +129,7 @@
 
 				viewer.on('ready', () => {
 					// All the viewer is ready to render frames
-					console.log('Ready → show controls + interaction prompt')
-
+					
 					loading.style.display = 'none'
 
 					zoomWrap.style.display = ''
@@ -112,11 +140,20 @@
 						: "Click and hold to rotate"
 				})
 
-				viewer.one('interactionStart', () => {
-					// First user interaction (note the 'one()' listener)
-					console.log('First interaction → hide custom interaction prompt')
-					intPrompt.style.display = 'none'
-				})
+				// Depending on the expected user experience
+				if (INTERACTION_PROMPT_ONLY_ONCE) {
+					viewer.one('interactionStart', () => {
+						intPrompt.style.display = 'none'
+					})
+				} else {
+					viewer.on('interactionStart', () => {
+						intPrompt.style.display = 'none'
+					})
+					viewer.on('interactionEnd', () => {
+						intPrompt.style.display = ''
+					})
+				}
+
 
 
 				/* -------------------------
@@ -131,13 +168,6 @@
 				/* -------------------------
 					HANDLING ZOOM
 				------------------------- */
-
-				// Speed of the zoom on pressing the button once
-				const ZOOM_CLICK_SPEED = 3
-				// Speed if we keep pressing the button. It's important to
-				// use per-second calcs to have consistent behavior on every
-				// device whatever its screen refresh rate (60hz, 144hz...)
-				const ZOOM_PRESS_SPEED_PER_SECOND = 15
 				
 				let zoomDirection = 0 // 0 for no zoom, 1 for zoom in, -1 for zoom out
 				let zoomTimeout = null
