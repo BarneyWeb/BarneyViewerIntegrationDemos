@@ -1,0 +1,8 @@
+{
+  "name": "@barney/viewer-integration-demos",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "http-server ./public -p 8081 --cors -c-1"
+  }
+}
