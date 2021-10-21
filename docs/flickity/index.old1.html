@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Flickity Integration</title>
+
+	<link rel="stylesheet" href="../css/main.css">
+	<link rel="stylesheet" href="./vendor/flickity.css">
+	<script src="./vendor/flickity.pkgd.min.js"></script>
+	<script src="https://viewer.barney-technologies.com/0.22.1/viewer-api.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/flickity-fullscreen@1/fullscreen.css">
+	<script src="https://unpkg.com/flickity-fullscreen@1/fullscreen.js"></script>
+</head>
+<body>
+
+	<div id="wrap">
+		<div class="fakeText -small"></div>
+		<div id="viewer">
+			<div class="slider">
+				<div class="slide">
+					<div class="iframe-wrap -proxy"></div>
+				</div>
+				<div class="slide">
+					<div class="fakeImage"></div>
+				</div>
+				<div class="slide">
+					<div class="fakeImage"></div>
+				</div>
+			</div>
+		</div>
+		<div class="fakeText -small"></div>
+		<div class="iframe-wrap"></div>
+		<div class="fakeText -large"></div>
+	</div>
+
+	<style>
+		.slider {
+			margin: 30px -20px 50px;
+		}
+		.slider.is-fullscreen {
+			margin: 0;
+		}
+		.slide {
+			width: 100%;
+		}
+
+
+		.iframe-wrap {
+			position: relative;
+			padding-bottom: 56.25%;
+		}
+		.iframe-wrap.\-proxy::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
+
+		.fakeText + .iframe-wrap {
+			margin: 30px -20px;
+		}
+
+		@media (max-width: 500px) {
+			.iframe-wrap,
+			.fakeImage::before {
+				padding-bottom: 120%;
+			}
+		}
+	</style>
+	
+	<script>
+
+		const flkty = new Flickity('.slider', {
+			contain: true,
+			wrapAround: true,
+		})
+
+		const iframeWraps = document.querySelectorAll('.iframe-wrap')
+		const iframeWrap = iframeWraps[0]
+
+		const url = [
+			window.location.protocol,
+			'//',
+			window.location.hostname,
+			':8080',
+			// '?b3d=/items/bague-grace/item.b3d&touch=cooperative&mouse=cooperative&debug=controls'
+			// '?b3d=/items/mask/item.b3d&touch=cooperative&mouse=cooperative'
+			// '?b3d=/items/8e8856ca93434f87712f03f8/item.b3d&touch=cooperative&mouse=cooperative' // legramme
+			'?b3d=/items/7eb82a11446c58d333a2ea36/item.b3d&touch=cooperative&mouse=cooperative' // mask
+		].join('')
+
+		const behavior = {
+			menu: { prevent: true },
+			mouse: {
+				left: { prevent: true, ifKey: { any: true } },
+				right: { prevent: true, ifKey: { any: true } },
+				middle: { prevent: false, ifKey: { any: true } },
+				wheel: { prevent: true, ifKey: { any: true } },
+			},
+			touch: {
+				one: { prevent: true },
+				two: { prevent: true },
+				three: { prevent: false },
+			}
+		}
+
+		const BUTTONS = {
+			0: 'left',
+			1: 'middle',
+			2: 'right',
+		}
+
+		const FINGERS = {
+			1: 'one',
+			2: 'two',
+			3: 'three',
+		}
+
+		const viewer = new Barney.Viewer({
+			url: url,
+			parent: iframeWrap,
+			style: {
+				'position': 'absolute',
+				'top': '0px',
+				'left': '0px',
+				'width': '100%',
+				'height': '100%',
+			},
+			onReady: () => {
+				console.log('ready')
+				
+				const pointersDown = []
+				let captureEvents = false
+
+				let _logCache = null
+				function log() {
+					if (_logCache != captureEvents) {
+						_logCache = captureEvents
+						console.log('captureEvents = ', captureEvents)
+					}
+					requestAnimationFrame(log)
+				}
+				log()
+
+				iframeWrap.addEventListener('mousewheel', onMouseWheel)
+				iframeWrap.addEventListener('contextmenu', onContextMenu)
+				iframeWrap.addEventListener('pointerdown', onPointerDown)
+
+
+				const tests = [
+
+					// NOTHING
+					{
+						event: { },
+						expect: true,
+					},
+					{
+						event: { ctrlKey: true },
+						expect: true,
+					},
+					{
+						event: { ctrlKey: true, metaKey: true },
+						expect: true,
+					},
+
+					// EMPTY
+					{
+						ifKey: { },
+						event: { },
+						expect: true,
+					},
+					{
+						ifKey: { },
+						event: { ctrlKey: true },
+						expect: true,
+					},
+					{
+						ifKey: { },
+						event: { ctrlKey: true, metaKey: true },
+						expect: true,
+					},
+
+					// ANY
+					{
+						ifKey: { any: true },
+						event: { },
+						expect: false,
+					},
+					{
+						ifKey: { any: true },
+						event: { ctrlKey: true },
+						expect: true,
+					},
+					{
+						ifKey: { any: true },
+						event: { ctrlKey: true, metaKey: true },
+						expect: true,
+					},
+
+					// CTRL
+					{
+						ifKey: { ctrl: true },
+						event: { },
+						expect: false,
+					},
+					{
+						ifKey: { ctrl: true },
+						event: { ctrlKey: true },
+						expect: true,
+					},
+					{
+						ifKey: { ctrl: true },
+						event: { ctrlKey: true, metaKey: true },
+						expect: true,
+					},
+					{
+						ifKey: { ctrl: true },
+						event: { metaKey: true },
+						expect: false,
+					},
+
+					// CTRL + ALT
+					{
+						ifKey: { alt: true, ctrl: true },
+						event: { },
+						expect: false,
+					},
+					{
+						ifKey: { alt: true, ctrl: true },
+						event: { ctrlKey: true },
+						expect: false,
+					},
+					{
+						ifKey: { alt: true, ctrl: true },
+						event: { ctrlKey: true, metaKey: true },
+						expect: false,
+					},
+					{
+						ifKey: { alt: true, ctrl: true },
+						event: { ctrlKey: true, altKey: true },
+						expect: true,
+					},
+					{
+						ifKey: { alt: true, ctrl: true },
+						event: { altKey: true, ctrlKey: true, metaKey: true },
+						expect: true,
+					},
+				]
+
+				tests.forEach((t, i) => {
+					const result = hasRequiredKeys(t.event, t.ifKey)
+					console.log(i+1, result, result == t.expect ? 'OK' : 'expected '+(t.expect?'true':'false'))
+				})
+
+				function hasRequiredKeys(event, ifKey) {
+					return !ifKey || !(
+						(ifKey.any && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey)
+					||	(ifKey.alt && !event.altKey)
+					||	(ifKey.ctrl && !event.ctrlKey)
+					||	(ifKey.meta && !event.metaKey)
+					||	(ifKey.shift && !event.shiftKey)
+					)
+				}
+
+				function onContextMenu(event) {
+					if (behavior.menu.prevent) event.preventDefault()
+				}
+
+				function onMouseWheel(event) {
+					if (behavior.mouse.wheel.prevent
+					&&  hasRequiredKeys(event, behavior.mouse.wheel.ifKey)
+					) event.preventDefault()
+					
+					viewer.onMouseWheel({
+						deltaX: event.deltaX,
+						deltaY: event.deltaY,
+						altKey: event.altKey,
+						ctrlKey: event.ctrlKey,
+						metaKey: event.metaKey,
+						shiftKey: event.shiftKey,
+					})
+				}
+
+				function onPointerDown(event) {
+					// Register pointer + get its index
+					let i = pointersDown.indexOf(event.pointerId)
+					if (i < 0) {
+						pointersDown.push(event.pointerId)
+						i = pointersDown.indexOf(event.pointerId)
+					}
+
+					if (event.pointerType != 'touch') {
+						const button = BUTTONS[event.button]
+						const action = behavior.mouse[button]
+						console.log(action)
+					}
+
+					if (event.pointerType != 'touch') {
+						viewer.onMouseDown(prepareMouseEvent(event), (preventDefault) => {
+							captureEvents = preventDefault
+						})
+					}
+
+					// Listen for further event globally
+					document.body.addEventListener('pointermove', onPointerMove)
+					window.addEventListener('pointerup', onPointerUp)
+				}
+
+				function onPointerMove(event) {
+					// Retrieve pointer index
+					let i = pointersDown.indexOf(event.pointerId)
+					if (i < 0) return
+
+					if (event.pointerType != 'touch') {
+						viewer.onMouseMove(prepareMouseEvent(event))
+					}
+
+					if (captureEvents) {
+						// Then, don't forward them to the parents
+						event.preventDefault()
+						event.stopPropagation()
+					}
+				}
+
+				function onPointerUp(event) {
+					// Retrieve pointer index
+					let i = pointersDown.indexOf(event.pointerId)
+					if (i < 0) return
+
+					if (event.pointerType != 'touch') {
+						viewer.onMouseUp(prepareMouseEvent(event), (preventDefault) => {
+							captureEvents = preventDefault
+						})
+					}
+					
+					// Unregister pointer
+					pointersDown.splice(i, 1)
+					
+					// Remove global event listeners
+					if (!pointersDown.length) {
+						document.body.removeEventListener('pointermove', onPointerMove)
+						window.removeEventListener('pointerup', onPointerUp)
+					}
+					
+					// console.log('pointerup', pointersDown)
+				}
+
+
+				iframeWrap.addEventListener('touchstart', onTouchStart)
+				iframeWrap.addEventListener('touchmove', onTouchMove)
+				iframeWrap.addEventListener('touchend', onTouchEnd)
+
+				function onTouchStart(event) {
+					console.log('onTouchStart')
+					viewer.onTouchStart(prepareTouchEvent(event),
+						(defaultPrevented) => {
+							captureEvents = defaultPrevented
+						})
+				}
+
+				function onTouchMove(event) {
+					console.log('onTouchMove')
+					viewer.onTouchMove(prepareTouchEvent(event))
+					
+					if (captureEvents) {
+						event.preventDefault()
+						event.stopPropagation()
+					}
+				}
+
+				function onTouchEnd(event) {
+					console.log('onToonTouchEnduchMove')
+					viewer.onTouchEnd(prepareTouchEvent(event),
+						(defaultPrevented) => {
+							captureEvents = defaultPrevented
+						})
+				}
+
+				function prepareMouseEvent(event) {
+					const rect = viewer._iframe.getBoundingClientRect()
+					return {
+						button: event.button,
+						clientX: event.clientX - rect.x,
+						clientY: event.clientY - rect.y,
+						altKey: event.altKey,
+						ctrlKey: event.ctrlKey,
+						metaKey: event.metaKey,
+						shiftKey: event.shiftKey,
+					}
+				}
+
+				function prepareTouchEvent(event) {
+					const rect = viewer._iframe.getBoundingClientRect()
+					return {
+						touches: Array.from(event.touches).map(t => ({
+							clientX: t.clientX - rect.x,
+							clientY: t.clientY - rect.y,
+							pageX: t.pageX - rect.x,
+							pageY: t.pageY - rect.y,
+						})),
+						altKey: event.altKey,
+						ctrlKey: event.ctrlKey,
+						metaKey: event.metaKey,
+						shiftKey: event.shiftKey,
+					}
+				}
+			},
+			onEvent: (eventType, data) => {
+				switch (eventType) {
+					case 'materialsChanged':
+						this.settings.model.materials = data
+						break
+				}
+			}
+		})
+		
+		
+
+		const viewer2 = new Barney.Viewer({
+			url: url,
+			parent: iframeWraps[1],
+			style: {
+				'position': 'absolute',
+				'top': '0px',
+				'left': '0px',
+				'width': '100%',
+				'height': '100%',
+			}
+		})
+
+	</script>
+
+</body>
+</html>

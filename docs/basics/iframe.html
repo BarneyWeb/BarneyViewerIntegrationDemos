@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="robots" content="noindex">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Iframe - Barney</title>
+	<link rel="stylesheet" href="../assets/main.css">
+</head>
+<body>
+
+	<div id="wrap">
+		
+		<h1>Iframe</h1>
+
+		<div class="lorem small"></div>
+
+		<div id="viewer">
+			<!-- <iframe src="https://staging-viewer.barney-technologies.com/82c3d54c618ce7f1e9927691?autorotate&mouse=cooperative&touch=cooperative" allowfullscreen frameborder="0"></iframe> -->
+			<iframe src="http://192.168.1.71:8080/?b3d=/items/redfox/item.b3d&autorotate&mouse=cooperative&touch=cooperative" allowfullscreen frameborder="0"></iframe>
+		</div>
+
+		<div class="lorem large"></div>
+
+		<style>
+
+			/* -------------------------
+				VIEWER 16:9
+			------------------------- */
+
+			#viewer {
+				position: relative;
+			}
+			#viewer::before {
+				content: '';
+				display: block;
+				padding-bottom: 56.25%;
+			}
+			#viewer iframe {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+		</style>
+
+	</div>
+
+</body>
+</html>

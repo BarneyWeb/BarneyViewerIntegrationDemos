@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="robots" content="noindex">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Viewer tag - Barney</title>
+	<link rel="stylesheet" href="../assets/main.css">
+
+	<!-- /!\ Not safe for PROD: early access of the viewer API -->
+
+	<!-- Barney Viewer API -->
+	<script>(function(B,a,r,n,e,y,_3,D){_3=B[e]||(B[e]={}),_3[n]||(_3[n]=function(c)
+	{(_3[n].l||(_3[n].l=[])).push(c);}),D=a.createElement(r),D.async=!0,D.src=y,
+	a.head.appendChild(D);}(window,document,'script','onReady','Barney',
+	'http://192.168.1.71:8080/api.js'));</script>
+	<!-- End Barney Viewer API -->
+
+</head>
+<body>
+
+	<div id="wrap">
+		
+		<h1>Pointer proxy</h1>
+
+		<div class="lorem small"></div>
+
+		<div id="viewer">
+			<barney-viewer url="http://192.168.1.71:8080/?b3d=/items/redfox/item.b3d" autorotate mouse="nocooperative" touch="nocooperative" aspect-ratio="16:9" pointer-proxy></barney-viewer>
+		</div>
+
+		<p>Events captured above the viewer:</p>
+		<ul class="events">
+			<li data-event="contextmenu"></li>
+		</ul>
+		<ul class="events">
+			<li data-event="wheel"></li>
+		</ul>
+		<ul class="events">
+			<li data-event="mousedown"></li>
+			<li data-event="mousemove"></li>
+			<li data-event="mouseup"></li>
+		</ul>
+		<ul class="events">
+			<li data-event="touchstart"></li>
+			<li data-event="touchmove"></li>
+			<li data-event="touchend"></li>
+			<li data-event="touchcancel"></li>
+		</ul>
+		<ul class="events">
+			<li data-event="pointerdown"></li>
+			<li data-event="pointermove"></li>
+			<li data-event="pointerup"></li>
+			<li data-event="pointercancel"></li>
+		</ul>
+
+		<div class="lorem large"></div>
+
+	</div>
+
+	<script>
+		(() => {
+			const viewerWrap = document.querySelector('#viewer')
+			const viewerEl = document.querySelector('barney-viewer')
+			
+			const events = document.querySelectorAll('[data-event]')
+			Array.from(events).forEach(el => {
+				const type = el.innerText = el.getAttribute('data-event')
+				viewerEl.addEventListener(type, (event) => {
+					el.classList.add('triggered')
+					requestAnimationFrame(() => el.classList.remove('triggered'))
+				})
+				viewerWrap.addEventListener(type, (event) => {
+					el.classList.add('bubbled')
+					el.classList.toggle('prevented', event.defaultPrevented)
+					requestAnimationFrame(() => el.classList.remove('bubbled'))
+				})
+			})
+
+		})()
+	</script>
+
+	<style>
+		.events {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			flex-flow: row wrap;
+			font-family: monospace;
+		}
+
+		.events li[data-event] {
+			margin: 0.2em;
+			padding: 0.1em 0.5em;
+			position: relative;
+    		border-radius: 0.3em;
+			background-color: rgba(0, 0, 0, 0.1);
+			transition: background-color 1000ms ease-in-out,
+						color 1000ms ease-in-out;
+		}
+		.events li[data-event].bubbled {
+			color: #fff;
+			background-color: #00f;
+			transition: none;
+		}
+		.events li[data-event].bubbled.prevented {
+			background-color: #333;
+		}
+
+		.events li[data-event]::before {
+			content: '';
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			box-sizing: border-box;
+			border: 1px solid #fff;
+			border-radius: 50%;
+			background: #fff;
+			margin-right: .4em;
+			transition: background-color 1000ms ease-in-out;
+		}
+		.events li[data-event].triggered::before {
+			background-color: #f00;
+			transition: none;
+		}
+	</style>
+
+
+</body>
+</html>

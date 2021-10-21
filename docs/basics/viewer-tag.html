@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="robots" content="noindex">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Viewer tag - Barney</title>
+	<link rel="stylesheet" href="../assets/main.css">
+
+	<!-- /!\ Not safe for PROD: early access of the viewer API -->
+
+	<!-- Barney Viewer API -->
+	<script>(function(B,a,r,n,e,y,_3,D){_3=B[e]||(B[e]={}),_3[n]||(_3[n]=function(c)
+	{(_3[n].l||(_3[n].l=[])).push(c);}),D=a.createElement(r),D.async=!0,D.src=y,
+	a.head.appendChild(D);}(window,document,'script','onReady','Barney',
+	'https://staging-viewer.barney-technologies.com/api.js'));</script>
+	<!-- End Barney Viewer API -->
+
+</head>
+<body>
+
+	<div id="wrap">
+		
+		<h1>Viewer tag</h1>
+
+		<div class="lorem small"></div>
+
+		<barney-viewer url="http://192.168.1.71:8080/?b3d=/items/redfox/item.b3d" autorotate mouse="cooperative" touch="cooperative" aspect-ratio="16:9"></barney-viewer>
+		<!-- <barney-viewer item="82c3d54c618ce7f1e9927691" host="https://staging-viewer.barney-technologies.com" autorotate mouse="cooperative" touch="cooperative" aspect-ratio="16:9"></barney-viewer> -->
+
+		<div class="lorem large"></div>
+
+	</div>
+
+</body>
+</html>

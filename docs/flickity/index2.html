@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Flickity Integration</title>
+	<link rel="stylesheet" href="../css/main.css">
+
+	<!-- Barney 3D Viewer -->
+	<script async src="http://localhost:8080/api.js"></script>
+	<!-- End Barney 3D Viewer -->
+
+</head>
+<body>
+
+	<div id="wrap">
+		<div class="fakeText -small"></div>
+		
+		<!-- <barney-viewer url="http://localhost:8080/?b3d=/items/mask/item.b3d" width="200.5" height="400" maxres="1k" flags="test test2" pointer-proxy></barney-viewer>
+
+		<barney-viewer item="497754e259dda0fd82b08550" maxres="1k" touch="cooperative" mouse="cooperative" flags="test test2" ratio="4/3"></barney-viewer>
+
+		<div class="fakeText -small"></div> -->
+
+		
+		<!--<div style="height: 100px;">
+			<barney-viewer url="http://localhost:8080/?b3d=/items/fox/item.b3d" maxres="1k" width="80%" height="100%"></barney-viewer>
+		</div>
+
+		<br>
+
+		<barney-viewer url="http://localhost:8080/?b3d=/items/fox/item.b3d" maxres="1k" width="80%" height="200"></barney-viewer>
+
+		<br>
+
+		<barney-viewer url="http://localhost:8080/?b3d=/items/fox/item.b3d" maxres="1k" width="600" height="400"></barney-viewer>
+
+		<br> -->
+
+
+
+
+
+		<h2>Using the API with the tag</h2>
+
+		<barney-viewer style="max-width: 300px; margin: 20px auto;" id="viewer2" url="http://localhost:8080/?b3d=/items/fox/item.b3d" maxres="1k" ratio="1:1" pointer-proxy></barney-viewer>
+
+		<barney-viewer style="max-width: 300px; margin: 20px auto;" id="viewer2" url="http://localhost:8080/?b3d=/items/fox/item.b3d" maxres="1k" ratio="1:1"></barney-viewer>
+
+		<script async src="http://localhost:8080/api.js"></script>
+		<script>
+			(function(B,a,r,n,e,y){n=B[a]||(B[a]={}),e=n[r]||(n[r]=
+			function(d){n[r].done?d():(y=e.callbacks||(e.callbacks=
+			[]),y.push(d));});}(window,'Barney','ready'));
+
+			// Wait for the API to be ready
+			Barney.ready(() => {
+				const el = document.querySelector('#viewer2')
+				Barney.initViewer(el)
+				const viewer = el.barney
+				console.log(viewer)
+			})
+		</script>
+
+
+
+
+		<!--
+		<h2>Using the API</h2>
+			
+		<div id="viewer"></div>
+
+		<style>
+			#viewer {
+				position: relative;
+			}
+			#viewer::before {
+				content: '';
+				display: block;
+				padding-bottom: 56.25%; /* = 16:9 */
+			}
+			#viewer iframe {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+		</style>
+
+		<script async src="http://localhost:8080/api.js"></script>
+		<script>
+			(function(B,a,r,n,e,y){n=B[a]||(B[a]={}),e=n[r]||(n[r]=
+			function(d){n[r].done?d():(y=e.callbacks||(e.callbacks=
+			[]),y.push(d));});}(window,'Barney','ready'));
+
+			// Wait for the API to be ready
+			Barney.ready(() => {
+				const viewer = new Barney.Viewer('#viewer', {
+					// itemId: '497754e259dda0fd82b08550',
+					url: 'http://localhost:8080/?b3d=/items/fox/item.b3d',
+					viewerVars: {
+						'autorotate': true,
+					},
+					events: {
+						onReady: () => {
+							// Then start playing the viewer
+							// viewer.setAnimations({ enabled: false })
+							setInterval(() => {
+								const r = Math.round(Math.random() * 255)
+								const g = Math.round(Math.random() * 255)
+								const b = Math.round(Math.random() * 255)
+								viewer.setBackground({ color: `rgb(${r}, ${g}, ${b})` })
+							}, 1000)
+						}
+					}
+				})
+			})
+		</script>
+-->
+
+
+
+		
+		<div class="fakeText -large"></div>
+
+	</div>
+
+	<style>
+
+		barney-viewer {
+			background-color: #ddd;
+		}
+
+	</style>
+
+</body>
+</html>

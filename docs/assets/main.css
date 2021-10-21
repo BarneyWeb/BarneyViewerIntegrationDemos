@@ -27,6 +27,18 @@ pre.code {
 	padding: 20px;
 }
 
+code {
+	background-color: rgba(0, 0, 0, 0.1);
+	padding: 0.05em 0.3em;
+	font-weight: normal;
+	font-size: 0.9em;
+	border-radius: 0.2em;
+}
+
+ul {
+	padding-left: 1.5em;
+}
+
 /* --------------------------------------------------
 	LAYOUT
 -------------------------------------------------- */
@@ -57,10 +69,10 @@ pre.code {
 	background-size: 100% 20px;
 }
 .lorem.small {
-	height: 100px;
+	height: 40px;
 }
 .lorem.medium {
-	height: 400px;
+	height: 200px;
 }
 .lorem.large {
 	height: 1000px;
@@ -71,11 +83,60 @@ pre.code {
 	FAKE IMAGE
 -------------------------------------------------- */
 
-.fakeImage {
-	background: linear-gradient(45deg, rgba(30,114,150,1) 0%, rgba(128,255,250,1) 100%);
+img {
+	max-width: 100%;
+	height: auto;
+	display: block;
 }
-.fakeImage::before {
+.img {
+	width: 100%;
+	background: linear-gradient(35deg, #bbb, #ccc 50%);
+}
+.img::before {
 	content: '';
 	display: block;
 	padding-bottom: 56.25%;
+}
+.img::after {
+	content: '';
+	width: 20%;
+	height: 20%;
+	display: block;
+	position: absolute;
+	top: 40%;
+	left: 40%;
+	background-image: url(../assets/icon-image.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	opacity: 0.2;
+}
+
+
+/* --------------------------------------------------
+	CALLOUT
+-------------------------------------------------- */
+
+.callout {
+	padding: 20px;
+	margin: 20px 0;
+	background-color: rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.05);
+}
+.callout h2 {
+	font-size: 20px;
+	margin: -0.2em 0 1em;
+}
+.callout :last-child {
+	margin-bottom: 0;
+}
+
+.callout.\-warning {
+	color: #0a0a0a;
+	background-color: #fff3d9;
+	border: 1px solid #ffae00;
+}
+.callout.\-warning h2 {
+	color: #e59c00;
 }
