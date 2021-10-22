@@ -4,21 +4,17 @@
 	<meta charset="UTF-8">
 	<meta name="robots" content="noindex">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	<title>Iframe API - Barney Viewer API Demos</title>
+	<title>Custom UI with iframe API - Barney</title>
 	<link rel="stylesheet" href="../assets/main.css">
 
-	<!-- /!\ Not safe for PROD: early access of the viewer API -->
-	
 	<!-- Barney Viewer API -->
 	<script>(function(B,a,r,n,e,y,_3,D){_3=B[e]||(B[e]={}),_3[n]||(_3[n]=function(c)
 	{(_3[n].l||(_3[n].l=[])).push(c);}),D=a.createElement(r),D.async=!0,D.src=y,
 	a.head.appendChild(D);}(window,document,'script','onReady','Barney',
 	'https://staging-viewer.barney-technologies.com/api.js'));</script>
-	<!-- End Barney Viewer API -->
 
 </head>
 <body>
-
 
 	<div id="wrap">
 		
@@ -90,9 +86,7 @@
 				
 				const viewer = new Barney.ViewerIframe(viewerWrap, {
 
-					// /!\ Not safe for PROD: early access of the viewer API
 					host: 'https://staging-viewer.barney-technologies.com',
-
 					itemId: '82c3d54c618ce7f1e9927691',
 
 					viewerVars: {
