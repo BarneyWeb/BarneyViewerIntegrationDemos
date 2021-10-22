@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Swiper - Barney integration demo</title>
+	<link rel="stylesheet" href="../css/main.css">
+
+	<!-- Swiper -->
+	<link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+	<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+</head>
+<body>
+
+	<div id="wrap">
+		
+		<h1>Swiper</h1>
+
+		<div class="fakeText -small"></div>
+
+		<div class="swiper">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<div class="fakeImage"></div>
+				</div>
+				<div class="swiper-slide">
+					<script async src="http://localhost:8080/api.js"></script>
+					<barney-viewer url="http://localhost:8080/?b3d=/items/fox/item.b3d&touch=cooperative" maxres="1k" ratio="16:9" pointer-proxy></barney-viewer>
+				</div>
+				<div class="swiper-slide">
+					<div class="fakeImage"></div>
+				</div>
+			</div>
+			<div class="swiper-pagination"></div>
+			<div class="swiper-button-prev"></div>
+			<div class="swiper-button-next"></div>
+			<div class="swiper-scrollbar"></div>
+		</div>
+
+		<div class="fakeText -small"></div>
+
+		<h2>Warning</h2>
+		<p>If you use <code>loop: true</code>, Swiper will duplicate the first slide at the end. If this first slide contains the Barney viewer, there will be 2 instances running at the same time on the page and this could impact performances.</p>
+		<p>Either don't use loop or don't place the viewer in the first position.</p>
+
+		<div class="fakeText -large"></div>
+
+	</div>
+
+	<script>
+		const swiper = new Swiper('.swiper', {
+			loop: true,
+			pagination: {
+				el: '.swiper-pagination',
+			},
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+		});
+	</script>
+
+</body>
+</html>

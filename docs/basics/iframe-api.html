@@ -7,14 +7,11 @@
 	<title>Iframe API - Barney</title>
 	<link rel="stylesheet" href="../assets/main.css">
 
-	<!-- /!\ Not safe for PROD: early access of the viewer API -->
-
 	<!-- Barney Viewer API -->
 	<script>(function(B,a,r,n,e,y,_3,D){_3=B[e]||(B[e]={}),_3[n]||(_3[n]=function(c)
 	{(_3[n].l||(_3[n].l=[])).push(c);}),D=a.createElement(r),D.async=!0,D.src=y,
 	a.head.appendChild(D);}(window,document,'script','onReady','Barney',
 	'https://staging-viewer.barney-technologies.com/api.js'));</script>
-	<!-- End Barney Viewer API -->
 
 </head>
 <body>
@@ -57,9 +54,8 @@
 			Barney.onReady(() => {
 
 				const viewer = new Barney.ViewerIframe('#viewer', {
-					// host: 'https://staging-viewer.barney-technologies.com',
-					// itemId: '82c3d54c618ce7f1e9927691',
-					url: 'http://192.168.1.71:8080/?b3d=/items/redfox/item.b3d',
+					host: 'https://staging-viewer.barney-technologies.com',
+					itemId: '82c3d54c618ce7f1e9927691',
 					viewerVars: {
 						'autorotate': true,
 						'mouse': 'cooperative',
