@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Barney integration demo</title>
+
+	<link rel="stylesheet" href="../css/main.css">
+
+	<!-- Barney Viewer API -->
+	<script>(function(B,a,r,n,e,y,_3,D){_3=B[e]||(B[e]={}),_3[n]||(_3[n]=function(c)
+	{(_3[n].l||(_3[n].l=[])).push(c);}),D=a.createElement(r),D.async=!0,D.src=y,
+	a.head.appendChild(D);}(window,document,'script','onReady','Barney',
+	'http://192.168.1.71:8080/api.js'));</script>
+	<!-- End Barney Viewer API -->
+
+</head>
+<body>
+
+	<div id="wrap">
+		
+		<h1>API Demo</h1>
+
+		<div id="viewer">
+			<div id="controls" style="display:none">
+				<a id="start" class="btn" href="#">start</a>
+				<a id="stop" class="btn" href="#">stop</a>
+				<span class="spacer"></span>
+				<a id="zoom-out" class="btn" href="#">-</a>
+				<a id="zoom-in" class="btn" href="#">+</a>
+			</div>
+		</div>
+
+		<div id="state"></div>
+		<div id="logs"></div>
+
+		<style>
+
+			/* -------------------------
+				VIEWER 16:9
+			------------------------- */
+
+			#viewer {
+				position: relative;
+			}
+			#viewer::before {
+				content: '';
+				display: block;
+				padding-bottom: 56.25%;
+			}
+			#viewer iframe {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+			
+			/* -------------------------
+				BUTTONS
+			------------------------- */
+
+			#controls {
+				z-index: 1;
+				position: absolute;
+				left: 0;
+				bottom: 0;
+
+				display: flex;
+
+				margin: 14px;
+				text-align: center;
+			}
+			#controls .btn {
+				margin: 1px;
+				color: #fff;
+				font-size: 0.8em;
+				text-transform: uppercase;
+				display: inline-block;
+				padding: 0.7em 1.2em 0.8em;
+				background-color: #333;
+				text-decoration: none;
+				border-radius: 0.2em;
+			}
+			#controls .btn:active {
+				background-color: #000;
+			}
+			#controls .spacer {
+				width: 10px;
+			}
+
+
+			/* -------------------------
+				DEBUG
+			------------------------- */
+			
+			#state, #logs {
+				margin: 20px 10px 0;
+				font-family: monospace;
+				white-space: pre;
+			}
+			#state .yes,
+			#state .no {
+				width: 2.5em;
+				display: inline-block;
+				text-align: center;
+			}
+			#state .yes {
+				color: #000;
+				background-color: #0d0;
+			}
+			#state .no {
+				color: #000;
+				background-color: #ccc;
+			}
+		</style>
+
+		<!-- Barney -->
+		<script>
+			Barney.onReady(() => {
+				console.log('onReady2')
+
+				const $controls = document.querySelector('#controls')
+				const $zoomIn = $controls.querySelector('#zoom-in')
+				const $zoomOut = $controls.querySelector('#zoom-out')
+				const $start = $controls.querySelector('#start')
+				const $stop = $controls.querySelector('#stop')
+
+				const ZOOM_SPEED = 3
+				const ZOOM_PER_SECOND = 15
+
+				let zoomDirection = 0
+				let zoomTimeout = null
+				let zoomLastTime = null
+
+				function zoom_pointerUpHandler(event) {
+					event.preventDefault()
+					event.stopPropagation()
+					window.removeEventListener('pointerdown', zoom_pointerUpHandler)
+					
+					if (zoomTimeout) clearTimeout(zoomTimeout)
+					zoomTimeout = null
+
+					zoomDirection = 0
+					zoomLastTime = null
+				}
+
+				function zoom_tickHandler(timestamp) {
+					if (!zoomDirection) return
+					if (zoomLastTime === null) zoomLastTime = timestamp
+					const diff = (timestamp - zoomLastTime) / 1000
+					if (!isNaN(diff)) viewer.zoomIn(ZOOM_PER_SECOND * diff * zoomDirection)
+					zoomLastTime = timestamp
+					requestAnimationFrame(zoom_tickHandler)
+				}
+
+				$zoomIn.addEventListener('contextmenu', (event) => event.preventDefault())
+				$zoomOut.addEventListener('contextmenu', (event) => event.preventDefault())
+				$zoomIn.addEventListener('click', (event) => event.preventDefault())
+				$zoomOut.addEventListener('click', (event) => event.preventDefault())
+
+				function zoom_handlePointerDown(event, direction) {
+					event.preventDefault()
+					zoomDirection = direction
+					viewer.zoomIn(ZOOM_SPEED * zoomDirection)
+					if (zoomTimeout) clearTimeout(zoomTimeout)
+					zoomTimeout = setTimeout(() => zoom_tickHandler(), 200)
+					window.addEventListener('pointerup', zoom_pointerUpHandler)
+				}
+
+				$zoomIn.addEventListener('pointerdown', (event) => zoom_handlePointerDown(event, 1))
+				$zoomOut.addEventListener('pointerdown', (event) => zoom_handlePointerDown(event, -1))
+
+				$start.addEventListener('click', (event) => {
+					event.preventDefault()
+					viewer.start()
+				})
+
+				$stop.addEventListener('click', (event) => {
+					event.preventDefault()
+					viewer.stop()
+				})
+
+				const viewer = new Barney.ViewerIframe('#viewer', {
+					url: 'http://192.168.1.71:8080/?b3d=/items/redfox/item.b3d',
+					viewerVars: {
+						'autorotate': true,
+						'autorotate-delay': 1000,
+						'mouse': 'cooperative-silent',
+						// 'loading-style': 'none',
+						// 'thumbnail-style': 'none',
+						// 'interaction-prompt-style': 'none',
+						// 'lang': 'en',
+					}
+				})
+
+				// déclenché dès que le pont API est ouvert
+				// mais le modèle 3d, n'est pas encore prêt.
+				viewer.on('apiReady', () => log('API ready'))
+
+				viewer.on('settingsReady', () => {
+					log('Settings ready')
+					viewer.getSettings((settings) => console.log('getSettings', settings))
+				})
+				
+				viewer.one('loadingProgress', (progress) => {
+					log('Started loading')
+				})
+				
+				viewer.one('loadingComplete', (stats) => {
+					const mbps = stats.speed / 1024/1024
+					log('Finished loading at '+ (Math.round(mbps * 10) / 10) +' Mb/s')
+				})
+
+				viewer.on('ready', () => {
+					log('Viewer fully ready')
+					$controls.style.display = ''
+					// viewer.setBackground({ color: '#ddd' })
+					// viewer.updateMaterial('Cable_11g_Orbrosse', { color: '#000' })
+				})
+				
+				viewer.one('start', () => {
+					log('First start → show helper')
+				})
+
+				viewer.one('interactionStart', () => {
+					log('First interaction → hide helper')
+				})
+
+				viewer.on('start', () => updateState({ playing: true }))
+				viewer.on('stop', () => updateState({ playing: false }))
+				viewer.on('interactionStart', () => updateState({ interacting: true }))
+				viewer.on('interactionEnd', () => updateState({ interacting: false }))
+				viewer.on('loadingProgress', (progress) => updateState({ loading: progress }))
+
+
+				// document.addEventListener('DOMContentReady', () => log('DOM Ready'))
+				// window.addEventListener('load', () => log('DOM Loaded'))
+
+				const $state = document.querySelector('#state')
+				const state = {
+					loading: 0,
+					playing: false,
+					interacting: false,
+				}
+
+				const YES = '<span class="yes">yes</span>'
+				const NO = '<span class="no">no</span>'
+
+				updateState()
+
+				function updateState(newState) {
+					Object.assign(state, newState)
+					$state.innerHTML = [
+						`loading: ${Math.round(state.loading*100)}%`,
+						`playing: ${state.playing?YES:NO}`,
+						`interacting: ${state.interacting?YES:NO}`,
+					].join('   ')
+					
+					$start.style.display = state.playing ? 'none' : ''
+					$stop.style.display = state.playing ? '' : 'none'
+				}
+
+				const start = (new Date()).getTime()
+
+				const $logs = document.querySelector('#logs')
+				function log(str) {
+					const time = (new Date()).getTime() - start
+					$logs.innerHTML += `${time}ms &bull; ${str}<br>`
+				}
+
+			})
+
+		</script>
+
+		<div class="fakeText -large"></div>
+
+	</div>
+
+</body>
+</html>

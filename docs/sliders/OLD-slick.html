@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Slick - Barney integration demo</title>
+	<link rel="stylesheet" href="../css/main.css">
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<!-- Slick -->
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+	<script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+</head>
+<body>
+
+	<div id="wrap">
+		
+		<h1>Slick</h1>
+
+		<div class="fakeText -small"></div>
+
+		<div class="slider">
+			<div class="slide">
+				<script async src="http://localhost:8080/api.js"></script>
+				<barney-viewer tabindex="1" url="http://localhost:8080/?b3d=/items/fox/item.b3d&touch=cooperative" maxres="1k" ratio="16:9" pointer-proxy></barney-viewer>
+			</div>
+			<div class="slide">
+				<div class="fakeImage"></div>
+			</div>
+			<div class="slide">
+				<div class="fakeImage"></div>
+			</div>
+		</div>
+
+		<div class="fakeText -small"></div>
+
+		<div class="fakeText -large"></div>
+
+	</div>
+
+	<style>
+		.slick-prev:before,
+		.slick-next:before {
+			color: #333;
+		}
+		barney-viewer:focus {
+			outline: 2px solid #00f;
+		}
+	</style>
+
+	<script>
+		jQuery(document).ready(function($) {
+			$('.slider').slick({
+				// infinite: false,
+				// fade: true,
+				// autoplay: true,
+			});
+		});
+	</script>
+
+</body>
+</html>

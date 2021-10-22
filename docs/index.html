@@ -10,9 +10,37 @@
 </head>
 <body>
 
-	<div id="side">
-		<h1 class="title"><a href="./">Barney Viewer API</a></h1>
+	<div id="menu">
+		<h1 class="title">
+			<a href="./">Barney Viewer API</a>
+			<a class="toggle" href="javascript:void(0)"></a>
+		</h1>
 		<ul>
+			<li>
+				<strong>Basics</strong>
+				<ul>
+					<li><a href="basics/iframe.html" target="viewport">Iframe</a></li>
+					<li><a href="basics/iframe-api.html" target="viewport">Iframe API</a></li>
+					<li><a href="basics/viewer-tag.html" target="viewport">Viewer tag</a></li>
+					<li><a href="basics/viewer-tag-api.html" target="viewport">Viewer tag and API</a></li>
+				</ul>
+			</li>
+			<li><hr></li>
+			<li>
+				<strong>Advanced</strong>
+				<ul>
+					<li><a href="advanced/viewer-tag-pointer-proxy.html" target="viewport">Pointer proxy with viewer tag</a></li>
+				</ul>
+			</li>
+			<li><hr></li>
+			<li>
+				<strong>Sliders</strong>
+				<ul>
+					<li><a href="sliders/flickity.html" target="viewport">Flickity</a></li>
+					<li><a href="sliders/swiper.html" target="viewport">Swiper</a></li>
+				</ul>
+			</li>
+			<li><hr></li>
 			<li>
 				<strong>Examples</strong>
 				<ul>
@@ -30,6 +58,23 @@
 	<script>
 		(() => {
 
+			/* -------------------------
+				MOBILE MENU
+			------------------------- */
+
+			const menu = document.querySelector('#menu')
+			const menuToggle = menu.querySelector('h1 a.toggle')
+
+			menuToggle.addEventListener('click', (event) => {
+				event.preventDefault()
+				menu.classList.toggle('-opened')
+			})
+
+			
+			/* -------------------------
+				PAGES
+			------------------------- */
+			
 			const DEFAULT_PAGE = 'general/index.html'
 			const GITHUB_URL_TEMPLATE = 'https://github.com/BarneyWeb/BarneyViewerIntegrationDemos/blob/main/docs/{path}?ts=4'
 
@@ -54,6 +99,7 @@
 					window.location.hash = path
 					sourceBtn.href = GITHUB_URL_TEMPLATE.replace('{path}', path)
 				}
+				menu.classList.remove('-opened')
 			}
 
 			function invalidateHash() {
@@ -66,6 +112,7 @@
 			}
 
 			invalidateHash()
+			
 
 		})()
 	</script>
