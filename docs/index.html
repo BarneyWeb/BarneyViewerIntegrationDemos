@@ -10,16 +10,12 @@
 </head>
 <body>
 
-	<div id="side">
-		<h1 class="title"><a href="./">Barney Viewer API</a></h1>
+	<div id="menu">
+		<h1 class="title">
+			<a href="./">Barney Viewer API</a>
+			<a class="toggle" href="javascript:void(0)"></a>
+		</h1>
 		<ul>
-			<li>
-				<strong>Examples</strong>
-				<ul>
-					<li><a href="examples/iframe-api-custom-ui.html" target="viewport">Custom UI with Iframe API</a></li>
-				</ul>
-			</li>
-			<li><hr></li>
 			<li>
 				<strong>Basics</strong>
 				<ul>
@@ -44,6 +40,13 @@
 					<li><a href="sliders/swiper.html" target="viewport">Swiper</a></li>
 				</ul>
 			</li>
+			<li><hr></li>
+			<li>
+				<strong>Examples</strong>
+				<ul>
+					<li><a href="examples/iframe-api-custom-ui.html" target="viewport">Custom UI with Iframe API</a></li>
+				</ul>
+			</li>
 		</ul>
 	</div>
 
@@ -55,6 +58,23 @@
 	<script>
 		(() => {
 
+			/* -------------------------
+				MOBILE MENU
+			------------------------- */
+
+			const menu = document.querySelector('#menu')
+			const menuToggle = menu.querySelector('h1 a.toggle')
+
+			menuToggle.addEventListener('click', (event) => {
+				event.preventDefault()
+				menu.classList.toggle('-opened')
+			})
+
+			
+			/* -------------------------
+				PAGES
+			------------------------- */
+			
 			const DEFAULT_PAGE = 'general/index.html'
 			const GITHUB_URL_TEMPLATE = 'https://github.com/BarneyWeb/BarneyViewerIntegrationDemos/blob/main/docs/{path}?ts=4'
 
@@ -79,6 +99,7 @@
 					window.location.hash = path
 					sourceBtn.href = GITHUB_URL_TEMPLATE.replace('{path}', path)
 				}
+				menu.classList.remove('-opened')
 			}
 
 			function invalidateHash() {
@@ -91,6 +112,7 @@
 			}
 
 			invalidateHash()
+			
 
 		})()
 	</script>

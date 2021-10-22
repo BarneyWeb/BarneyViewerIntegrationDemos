@@ -39,6 +39,16 @@ ul {
 	padding-left: 1.5em;
 }
 
+img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+a {
+	color: #00f;
+}
+
 /* --------------------------------------------------
 	LAYOUT
 -------------------------------------------------- */
@@ -83,11 +93,6 @@ ul {
 	FAKE IMAGE
 -------------------------------------------------- */
 
-img {
-	max-width: 100%;
-	height: auto;
-	display: block;
-}
 .img {
 	width: 100%;
 	background: linear-gradient(35deg, #bbb, #ccc 50%);

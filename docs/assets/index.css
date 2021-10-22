@@ -33,8 +33,10 @@ a {
 
 -------------------------------------------------- */
 
-#side {
+#menu {
+	z-index: 2;
 	width: 280px;
+	max-width: 100%;
 	padding: 20px;
 	box-sizing: border-box;
 	overflow: auto;
@@ -47,43 +49,81 @@ a {
 	background-color: #0d1117;
 }
 
-#side a {
-	text-decoration: none;
-}
-#side a:hover {
-	text-decoration: underline;
-}
+#menu h1 {
+	position: sticky;
+    top: -20px;
+	background-color: #0d1117;
 
-#side h1 {
+	height: 30px;
 	font-size: 20px;
 	padding: 20px;
 	margin: -20px -20px 20px;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
+#menu h1 .toggle {
+	display: none;
+	
+	width: 70px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+#menu h1 .toggle::before,
+#menu h1 .toggle::after {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 26px;
+	border-top: 2px solid #fff;
+	transform: translate(-50%, -50%);
+	transition: all 150ms ease-in-out;
+}
+#menu h1 .toggle::after {
+	height: 14px;
+	border-bottom: 2px solid #fff;
+}
+#menu.\-opened h1 .toggle::before {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+#menu.\-opened h1 .toggle::after {
+	height: 0;
+	border-bottom: 0;
+	transform: translate(-50%, -50%) rotate(45deg);
+}
 
-#side ul {
+#menu a {
+	text-decoration: none;
+}
+#menu a:hover {
+	text-decoration: underline;
+}
+
+#menu ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
-#side ul ul {
+#menu ul ul {
 	margin: 5px 0 20px 5px;
 }
-#side ul li {
+#menu ul li {
 	margin-bottom: 5px;
 }
-#side ul hr {
+#menu ul hr {
 	margin: 15px 0px 20px;
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-width: 0 0 1px;
 }
 
-#side ul a {
+#menu ul a {
 	display: block;
 	padding: 0.2em 0.5em;
 	border-radius: 0.5em;
 }
-#side ul a:hover {
+#menu ul a:hover {
 	background-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -144,4 +184,24 @@ a {
 }
 #main a#source-btn::before {
 	content: "<>";
+}
+
+@media (max-width: 700px) {
+	#menu {
+		width: 100%;
+		height: 70px;
+		overflow: hidden;
+		transition: height 200ms ease-in-out;
+	}
+	#menu.\-opened {
+		height: 100%;
+		overflow: auto;
+	}
+	#menu h1 .toggle {
+		display: block;
+	}
+	#main {
+		left: 0;
+		top: 70px;
+	}
 }
