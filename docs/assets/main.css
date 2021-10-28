@@ -95,6 +95,7 @@ a {
 
 .img {
 	width: 100%;
+	position: relative;
 	background: linear-gradient(35deg, #bbb, #ccc 50%);
 }
 .img::before {
