@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="robots" content="noindex">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Fotorama - Barney</title>
+	<link rel="stylesheet" href="../assets/main.css">
+
+	<!-- Fotorama (+ jQuery) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+
+	<!-- Barney Viewer API -->
+	<script>(function(B,a,r,n,e,y,_3,D){_3=B[e]||(B[e]={}),_3[n]||(_3[n]=function(c)
+	{(_3[n].l||(_3[n].l=[])).push(c);}),D=a.createElement(r),D.async=!0,D.src=y,
+	a.head.appendChild(D);}(window,document,'script','onReady','Barney',
+	'https://viewer.barney-technologies.com/api.js'));</script>
+
+</head>
+<body>
+
+	<div id="wrap">
+		
+		<h1>Fotorama</h1>
+		<p><a href="https://fotorama.io/" target="_blank">fotorama.io</a></p>
+
+		<div class="lorem small"></div>
+
+		<div class="fotorama" data-width="100%" data-ratio="16/9" data-arrows="true" data-click="false" data-allowfullscreen="true" data-swipe="true" data-loop="true">
+			<div>
+				<barney-viewer item="82c3d54c618ce7f1e9927691" autorotate mouse="cooperative" touch="cooperative" pointer-proxy></barney-viewer>
+			</div>
+			<div>
+				<div class="img"></div>
+			</div>
+			<div>
+				<div class="img"></div>
+			</div>
+		</div>
+
+		<div class="lorem large"></div>
+
+	</div>
+
+	<style>
+		.slick-prev:before,
+		.slick-next:before {
+			color: #333;
+		}
+	</style>
+
+</body>
+</html>
