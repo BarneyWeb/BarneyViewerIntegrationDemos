@@ -22,7 +22,9 @@
 
 		<div class="lorem small"></div>
 
-		<barney-viewer item="82c3d54c618ce7f1e9927691" autorotate mouse="cooperative" touch="cooperative" aspect-ratio="16:9"></barney-viewer>
+		<barney-viewer item="ab67aa4a88bcfef81dee0202" autorotate mouse="cooperative" touch="cooperative" aspect-ratio="16:9"></barney-viewer>
+
+		<p><a href="javascript:void(0)" id="change-background" style="display: none;">Change the background</a></p>
 
 		<div class="lorem large"></div>
 
@@ -34,7 +36,15 @@
 			const viewer = Barney.getViewer()
 
 			viewer.on('ready', () => {
-				viewer.setBackground({ color: '#3f3fff' })
+				
+				const button = document.getElementById('change-background')
+				button.style.display = ''
+
+				button.addEventListener('click', (event) => {
+					event.preventDefault()
+					const randomColor = "#" + ((1<<24)*Math.random() | 0).toString(16)
+					viewer.setBackground({ color: randomColor })
+				})
 			})
 
 		})
