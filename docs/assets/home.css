@@ -132,11 +132,11 @@ a {
 -------------------------------------------------- */
 
 #main {
-	position: fixed;
-	top: 0;
-	left: 260px;
-	right: 0;
-	bottom: 0;
+  position: fixed;
+  top: 0;
+  left: 260px;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-flow: column;
   justify-content: stretch;
@@ -164,12 +164,12 @@ a {
 
 #main iframe {
   flex-grow: 1;
-	/* z-index: 1;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%; */
+  /* z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; */
 }
 
 
