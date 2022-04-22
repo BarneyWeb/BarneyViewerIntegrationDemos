@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+	<meta charset="UTF-8">
+	<meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+  <title>Custom Zoom Example - Viceversa</title>
+  <link rel="stylesheet" href="/assets/examples.css">
+</html>
+<body>
+  <div id="example">
+
+
+
+    <!-- Import the Viceversa Viewer component --> 
+    <script>!(function(V,i,c,e,v,er,s,a){s=V[v]||(V[v]={}),s[e]||(s[e]=function(x)
+    {(s[e].l||(s[e].l=[])).push(x);}),a=i.createElement(c),a.async=!0,a.src=er,
+    i.head.appendChild(a);}(window,document,'script','onReady','Viceversa',
+    'https://embed.viceversa.xyz/api.js'));</script>
+
+
+
+    <div class="vv-wrap">
+
+      <!-- Use the viewer like any other HTML element --> 
+      <viceversa-viewer item="ab67aa4a88bcfef81dee0202" autorotate aspect-ratio="16:9" mouse="cooperative-silent"></viceversa-viewer>
+
+      <div class="vv-zoom">
+        <div href="javascript:void(0)" class="vv-zoom-in"></div>
+        <div href="javascript:void(0)" class="vv-zoom-out"></div>
+      </div>
+
+    </div>
+
+
+
+    <style>
+      .vv-wrap {
+        position: relative;
+      }
+      .vv-zoom {
+        display: none;
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+        pointer-events: none;
+      }
+      .vv-zoom--on {
+        display: block;
+        opacity: 1;
+        animation: vv-zoom--on 2s ease-in-out;
+      }
+      @keyframes vv-zoom--on {
+        0% { opacity: 0; }
+        25% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      .vv-zoom-in,
+      .vv-zoom-out {
+        margin: 5px;
+        width: 36px;
+        height: 36px;
+        display: block;
+        position: relative;
+        border-radius: 50%;
+        background-color: #212121;
+        opacity: 0.8;
+        cursor: pointer;
+        pointer-events: all;
+      }
+      .vv-zoom-in:hover,
+      .vv-zoom-out:hover {
+        opacity: 1;
+      }
+      .vv-zoom-in::before,
+      .vv-zoom-in::after,
+      .vv-zoom-out::before {
+        content: '';
+        margin: -1px -5px;
+        width: 10px;
+        height: 2px;
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background-color: #fff;
+      }
+      .vv-zoom-in::after {
+        transform: rotate(90deg);
+      }
+    </style>
+
+
+    
+    <script>
+      // Wait for the API to load
+      Viceversa.onReady(() => {
+
+      /* -------------------------
+          CONFIG
+      ------------------------- */
+      
+      const ZOOM_CLICK_SPEED = 3 // Zoom speed for 1 click
+      const ZOOM_PRESS_SPEED_PER_SECOND = 15 // Zoom speed while button pressed
+
+      /* -------------------------
+          DOM + VIEWER
+      ------------------------- */
+      
+      const wrap = document.querySelector('.vv-wrap')
+      const zoom = wrap.querySelector('.vv-zoom')
+      const zoomIn = wrap.querySelector('.vv-zoom-in')
+      const zoomOut = wrap.querySelector('.vv-zoom-out')
+      
+      const viewer = Viceversa.getViewer(wrap)
+
+      viewer.on('ready', () => {
+        // Wait for the model to be loaded before showing the buttons
+        zoom.classList.add('vv-zoom--on')
+      })
+
+      /* -------------------------
+          ZOOM
+      ------------------------- */
+      
+      let zoomDirection = 0 // 0 for no zoom, 1 for zoom in, -1 for zoom out
+      let zoomTimeout = null
+      let zoomLastTime = null
+
+      // Prevent long touch press from opening the context menu
+      zoomIn.addEventListener('contextmenu', (e) => e.preventDefault())
+      zoomOut.addEventListener('contextmenu', (e) => e.preventDefault())
+      // Listen for both mouse and touch press of the buttons (= pointer)
+      zoomIn.addEventListener('pointerdown', (e) => onZoomStart(1))
+      zoomOut.addEventListener('pointerdown', (e) => onZoomStart(-1))
+
+      function onZoomStart(direction) {
+        zoomDirection = direction
+        // Listen for the release of the button
+        window.addEventListener('pointerup', onZoomEnd)
+        window.addEventListener('pointercancel', onZoomEnd)
+        // One big zoom in/out on press
+        viewer.zoomIn(ZOOM_CLICK_SPEED * zoomDirection)
+        // And wait a little before considering the 'button press'
+        if (zoomTimeout) clearTimeout(zoomTimeout)
+        zoomTimeout = setTimeout(() => whileZoomPressed(), 250)
+      }
+
+      function onZoomEnd(event) {
+        // Remove listeners
+        window.removeEventListener('pointerup', onZoomEnd)
+        window.removeEventListener('pointercancel', onZoomEnd)
+        // Stop pending timeout
+        if (zoomTimeout) clearTimeout(zoomTimeout)
+        zoomTimeout = null
+        // Reset vars
+        zoomDirection = 0
+        zoomLastTime = null
+      }
+
+      function whileZoomPressed(time) {
+        if (!zoomDirection) return
+        // Calc the "per second" factor to apply. Important to keep a
+        // constistent behavior on every device refresh rate (60hz, 144hz...)
+        if (zoomLastTime === null) zoomLastTime = time
+        const delta = (time - zoomLastTime) / 1000
+        // If it's a correct number, send it to the viewer
+        if (!isNaN(delta)) viewer.zoomIn(ZOOM_PRESS_SPEED_PER_SECOND * delta * zoomDirection)
+        // Store value + call next frame
+        zoomLastTime = time
+        requestAnimationFrame(whileZoomPressed)
+      }
+
+    })
+  </script>
+
+
+
+  </div>
+</body>

@@ -1,125 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="robots" content="noindex">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Barney integration demo</title>
-	<link rel="stylesheet" href="assets/index.css">
-</head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+  <title>Viceversa Embed Examples</title>
+  <link rel="stylesheet" href="/assets/home.css">
+</html>
 <body>
 
-	<div id="menu">
-		<h1 class="title">
-			<a href="./">Barney Viewer API</a>
+  <div id="side">
+    <div class="title">
+      <a class="logo" href="./"><span class="sr-only">Viceversa</span></a>
 			<a class="toggle" href="javascript:void(0)"></a>
-		</h1>
-		<ul>
-			<li>
-				<strong>Embedding the viewer</strong>
-				<ul>
-					<li><a href="basics/iframe.html" target="viewport">Iframe</a></li>
-					<!-- <li><a href="basics/iframe-api.html" target="viewport">Iframe API</a></li> -->
-					<li><a href="basics/viewer-tag.html" target="viewport">Viewer tag</a></li>
-					<li><a href="basics/viewer-tag-api.html" target="viewport">Viewer tag and API</a></li>
-				</ul>
-			</li>
-			<li><hr></li>
-			<li>
-				<strong>Inside sliders</strong>
-				<ul>
-					<li><a href="sliders/flickity.html" target="viewport">Flickity</a></li>
-					<li><a href="sliders/swiper.html" target="viewport">Swiper</a></li>
-					<li><a href="sliders/slick.html" target="viewport">Slick</a></li>
-					<li><a href="sliders/fotorama.html" target="viewport">Fotorama</a></li>
-				</ul>
-			</li>
-			<li><hr></li>
-			<li>
-				<strong>Examples</strong>
-				<ul>
-					<li><a href="examples/event-tracking.html" target="viewport">Event tracking</a></li>
-					<li><a href="examples/iframe-api-custom-ui.html" target="viewport">Custom UI with Iframe API</a></li>
-				</ul>
-			</li>
-			<li><hr></li>
-			<li>
-				<strong>Advanced</strong>
-				<ul>
-					<li><a href="advanced/viewer-tag-pointer-proxy.html" target="viewport">Pointer proxy with viewer tag</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
+    </div>
+    <ul class="menu">
+      <li>
+        <small>Embedding the viewer</small>
+        <ul>
+          <li><a href="/examples/basic.html" target="page">Basic embed example</a></li>
+        </ul>
+      </li>
+      <li>
+        <small>Using the JS API</small>
+        <ul>
+          <li><a href="/examples/custom-zoom.html" target="page">Custom zoom</a></li>
+        </ul>
+      </li>
+      <li>
+        <small>Inside sliders</small>
+        <ul>
+          <li><a href="/examples/slider-flickity.html" target="page">Flickity</a></li>
+          <li><a href="/examples/slider-fotorama.html" target="page">Fotorama</a></li>
+          <li><a href="/examples/slider-slick.html" target="page">Slick</a></li>
+          <li><a href="/examples/slider-swiper.html" target="page">Swiper</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 
-	<div id="main">
-		<iframe name="viewport" frameborder="0"></iframe>
-		<a id="source-btn" href="javascript:void(0)" target="_blank" title="View source"></a>
-	</div>
+  <div id="main">
+    
+    <div class="welcome">
+      <h1>Docs</h1>
+      <h2></h2>
+      <p>Find detailed instructions on our <a href="https://barneycorp.notion.site/Viceversa-Virtual-Touch-Viewer-integration-guide-d0fbc0ffb1334bd684247ee55f79dd3c" target="_blank">Viewer integration guide</a>.</p>
+      <p>Or browse our <a href="#/examples/basic.html">embed examples</a> by using the left menu.</p>
+    </div>
 
-	<script>
-		(() => {
+    <div class="header">
+      <h1 class="page-title">Title</h1>
+      <a href="#" class="view-source" target="_blank">View source code</a>
+    </div>
 
-			/* -------------------------
-				MOBILE MENU
-			------------------------- */
+    <iframe name="page" frameborder="0"></iframe>
 
-			const menu = document.querySelector('#menu')
-			const menuToggle = menu.querySelector('h1 a.toggle')
+  </div>
 
-			menuToggle.addEventListener('click', (event) => {
-				event.preventDefault()
-				menu.classList.toggle('-opened')
-			})
+  <script>
+    (() => {
 
-			
-			/* -------------------------
-				PAGES
-			------------------------- */
-			
-			const DEFAULT_PAGE = 'general/index.html'
-			const GITHUB_URL_TEMPLATE = 'https://github.com/BarneyWeb/BarneyViewerIntegrationDemos/blob/main/docs/{path}?ts=4'
+      const GITHUB_URL_TEMPLATE = 'https://github.com/BarneyWeb/BarneyViewerIntegrationDemos/blob/main{path}'
 
-			const viewport = document.querySelector('iframe[name="viewport"]')
-			const sourceBtn = document.querySelector('a#source-btn')
+      const iframe = document.querySelector('iframe[name="page"]')
+      const welcome = document.querySelector('#main .welcome')
+      const header = document.querySelector('#main .header')
+      const pageTitle = document.querySelector('#main .page-title')
+      const viewSource = document.querySelector('#main a.view-source')
 
-			const links = document.querySelectorAll('a[target="viewport"]')
-			Array.from(links).forEach((link) => {
-				link.addEventListener('click', (event) => {
-					event.preventDefault()
-					openPage(link.getAttribute('href'))
-				})
-			})
+      const links = Array.from(document.querySelectorAll('a[target="page"]'))
+      links.forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault()
+          openPage(link.getAttribute('href'))
+        })
+      })
 
-			window.addEventListener('hashchange', () => invalidateHash())
+      window.addEventListener('hashchange', () => invalidateHash())
 
-			function openPage(path) {
-				viewport.src = path
-				if (path === DEFAULT_PAGE) {
-					window.location.hash = ''
-				} else {
-					window.location.hash = path
-					sourceBtn.href = GITHUB_URL_TEMPLATE.replace('{path}', path)
-				}
-				menu.classList.remove('-opened')
-			}
+      function openPage(page) {
+        window.location.hash = page
+        invalidateHash()
+      }
 
-			function invalidateHash() {
-				if (window.location.hash) {
-					const file = window.location.hash.substring( 1 );
-					openPage(file)
-				} else {
-					openPage(DEFAULT_PAGE)
-				}
-			}
+      function invalidateHash() {
+        let page = (window.location.hash || '').substring(1)
+        
+        // Deactivate all menu links
+        links.forEach(link => link.classList.remove('--current'))
+        
+        // Find the current page
+        const link = links.find(link => link.getAttribute('href') === page)
+        if (link) {
+          link.classList.add('--current')
+          // update title + source link
+          pageTitle.innerText = link.innerText
+          viewSource.href = GITHUB_URL_TEMPLATE.replace('{path}', page)
+          // show/hide elements
+          header.style.display = ''
+          iframe.style.display = ''
+          welcome.style.display = 'none'
+          // Changes the content of the iframe
+          iframe.contentWindow.location.replace(page)
+        } else {
+          header.style.display = 'none'
+          iframe.style.display = 'none'
+          welcome.style.display = ''
+          // Changes the content of the iframe
+          iframe.src = ''
+        }
 
-			invalidateHash()
-			
+      }
 
-		})()
-	</script>
+      invalidateHash()
+
+
+      })()
+  </script>
 
 </body>
-
-</html>

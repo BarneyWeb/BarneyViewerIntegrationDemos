@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+  <title>Fotorama Example - Viceversa</title>
+  <link rel="stylesheet" href="/assets/examples.css">
+</html>
+<body>
+  <div id="example">
+
+
+
+    <!-- Fotorama (+ jQuery) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+
+
+
+    <!-- Import the Viceversa Viewer component --> 
+    <script>!(function(V,i,c,e,v,er,s,a){s=V[v]||(V[v]={}),s[e]||(s[e]=function(x)
+    {(s[e].l||(s[e].l=[])).push(x);}),a=i.createElement(c),a.async=!0,a.src=er,
+    i.head.appendChild(a);}(window,document,'script','onReady','Viceversa',
+    'https://embed.viceversa.xyz/api.js'));</script>
+
+
+
+    <div class="fotorama" data-width="100%" data-ratio="16/9" data-arrows="true" data-click="false" data-allowfullscreen="true" data-swipe="true" data-loop="true">
+      <div>
+        <!-- Use the viewer like any other HTML element --> 
+        <viceversa-viewer item="ab67aa4a88bcfef81dee0202" autorotate mouse="cooperative" touch="cooperative" pointer-proxy></viceversa-viewer>
+      </div>
+      <div>
+        <div class="img-mock"></div>
+      </div>
+      <div>
+        <div class="img-mock"></div>
+      </div>
+    </div>
+
+
+
+  </div>
+</body>
