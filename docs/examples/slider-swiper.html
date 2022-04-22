@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+  <title>Swiper Example - Viceversa</title>
+  <link rel="stylesheet" href="/assets/examples.css">
+</html>
+<body>
+  <div id="example">
+
+
+
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+
+
+    <!-- Import the Viceversa Viewer component --> 
+    <script>!(function(V,i,c,e,v,er,s,a){s=V[v]||(V[v]={}),s[e]||(s[e]=function(x)
+    {(s[e].l||(s[e].l=[])).push(x);}),a=i.createElement(c),a.async=!0,a.src=er,
+    i.head.appendChild(a);}(window,document,'script','onReady','Viceversa',
+    'https://embed.viceversa.xyz/api.js'));</script>
+
+      
+
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <!-- Use the viewer like any other HTML element --> 
+          <viceversa-viewer item="ab67aa4a88bcfef81dee0202" autorotate mouse="cooperative" touch="cooperative" pointer-proxy></viceversa-viewer>
+        </div>
+        <div class="swiper-slide">
+          <div class="img-mock"></div>
+        </div>
+        <div class="swiper-slide">
+          <div class="img-mock"></div>
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+
+    <p><strong>Important:</strong> If the viewer is the first slide, don't use the <code>loop:true</code> option.</p>
+    <p>Swiper duplicates the first slide to perform the loop. This will double the 3D viewer on the page and could cause performance and UX issues.</p>
+
+
+
+    <script>
+      const swiper = new Swiper('.swiper', {
+        loop: false,
+        pagination: {
+          el: '.swiper-pagination',
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      });
+    </script>
+
+
+
+  </div>
+</body>

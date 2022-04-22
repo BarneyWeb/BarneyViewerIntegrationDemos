@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+  <title>Slick Example - Viceversa</title>
+  <link rel="stylesheet" href="/assets/examples.css">
+</html>
+<body>
+  <div id="example">
+
+
+
+    <!-- Slick (+ jQuery) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+
+
+    <!-- Import the Viceversa Viewer component --> 
+    <script>!(function(V,i,c,e,v,er,s,a){s=V[v]||(V[v]={}),s[e]||(s[e]=function(x)
+    {(s[e].l||(s[e].l=[])).push(x);}),a=i.createElement(c),a.async=!0,a.src=er,
+    i.head.appendChild(a);}(window,document,'script','onReady','Viceversa',
+    'https://embed.viceversa.xyz/api.js'));</script>
+
+
+    <div class="slider">
+      <div class="slide">
+        <!-- Use the viewer like any other HTML element --> 
+        <viceversa-viewer item="ab67aa4a88bcfef81dee0202" autorotate mouse="cooperative" touch="cooperative" pointer-proxy></viceversa-viewer>
+      </div>
+      <div class="slide">
+        <div class="img-mock"></div>
+      </div>
+      <div class="slide">
+        <div class="img-mock"></div>
+      </div>
+    </div>
+
+    <p><strong>Important:</strong> If the viewer is the first slide, don't use the <code>infinite:true</code> option.</p>
+    <p>Slick duplicates the first slide to perform the loop. This will double the 3D viewer on the page and could cause performance and UX issues.</p>
+
+
+
+    <style>
+      .slick-prev:before,
+      .slick-next:before {
+        color: #333;
+      }
+    </style>
+  
+    <script>
+      jQuery(document).ready(function($) {
+        $('.slider').slick({
+          infinite: false,
+        });
+      });
+    </script>
+
+
+
+  </div>
+</body>

@@ -3,6 +3,6 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "dev": "http-server ./docs -p 8081 --cors -c-1"
+    "start": "http-server ./docs -p 8081 --cors -c-1"
   }
 }
