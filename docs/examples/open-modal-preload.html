@@ -3,7 +3,7 @@
   <meta charset="UTF-8">
   <meta name="robots" content="noindex">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
-  <title>Open Modal Example - Viceversa</title>
+  <title>Open Modal Example (with preload) - Viceversa</title>
   <link rel="stylesheet" href="/assets/examples.css">
 </html>
 <body>
@@ -20,22 +20,18 @@
 
 
     <p><a class="button" href="javascript:void(0)"
-      onclick="openViewerModal('my-viewer-modal')">View 3D model</a></p>
+      onclick="document.getElementById('my-viewer-modal').classList.add('vv-modal--opened')">View 3D model</a></p>
 
-    <script id="my-viewer-modal" type="text/template">
+    <div id="my-viewer-modal" class="vv-modal">
+      <a class="vv-modal-close" href="javascript:void(0)"
+        onclick="this.closest('.vv-modal').classList.remove('vv-modal--opened')" ></a>
+      <div class="vv-modal-body">
+        
+        <!-- Use the viewer like any other HTML element --> 
+        <viceversa-viewer item="ab67aa4a88bcfef81dee0202" autorotate style="position:absolute;top:0;left:0;width:100%;height:100%;"></viceversa-viewer>
 
-      <div class="vv-modal">
-        <a class="vv-modal-close" href="javascript:void(0)"></a>
-        <div class="vv-modal-body">
-          
-          <!-- Use the viewer like any other HTML element --> 
-          <viceversa-viewer item="ab67aa4a88bcfef81dee0202" autorotate style="position:absolute;top:0;left:0;width:100%;height:100%;"></viceversa-viewer>
-  
-        </div>
       </div>
-
-    </script>
-
+    </div>
 
 
 
@@ -109,46 +105,11 @@
 
 
 
-    <script>
-
-      function getViewerModal(id) {
-        const template = document.querySelector('script#'+id)
-        let modal = template.__modal // get reference, or creates it
-        if (!modal) {
-          const tmp = document.createElement('div')
-          tmp.innerHTML = template.innerHTML
-          modal = template.__modal = tmp.querySelector('.vv-modal')
-
-          // Add it to the DOM
-          document.body.appendChild(modal)
-          // And initialise the viewer (important!)
-          Viceversa.initViewers()
-
-          // Close button
-          modal.querySelector('.vv-modal-close').addEventListener('click', event => {
-            event.preventDefault()
-            modal.classList.remove('vv-modal--opened')
-          })
-
-        }
-        return modal
-      }
-
-      function openViewerModal(id) {
-        const modal = getViewerModal(id)
-        modal.classList.add('vv-modal--opened')
-      }
-
-    </script>
-
-
-
     <div class="comment">
       <p>You can click the button above to display the viewer.</p>
       <br>
-      <p>In the current example, the modal/viewer element is created and added to the DOM <strong>only when the user requests it</strong>. The viewer then needs to load the model, but it saves loading data for users that won't click the button.</p>
+      <p>In the current example, the modal/viewer element is always on the DOM, and the viewer starts loading when the page is ready. When the user clicks the button, the model is already preloaded, but this could add unwanted extra loading data for users that never click on the button.</p>
       <br>
-      <p><strong>Initialization:</strong> Make sure to call Viceversa.initViewers() when a <code>&lt;viceversa-viewer&gt;</code> element is added to the page after the DOM was loaded/initialized.</p>
       <p><strong>Performance:</strong> When the viewer is used inside a modal, make sure it has width:0px and height:0px when the modal is hidden. This will prevent useless 3D computations.</p>
     </div>
 
