@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+  <title>Custom Zoom Example - Viceversa</title>
+  <link rel="stylesheet" href="/assets/examples.css">
+</html>
+<body>
+  <div id="example">
+
+
+
+    <!-- Import the Viceversa Viewer component --> 
+    <script>!(function(V,i,c,e,v,er,s,a){s=V[v]||(V[v]={}),s[e]||(s[e]=function(x)
+    {(s[e].l||(s[e].l=[])).push(x);}),a=i.createElement(c),a.async=!0,a.src=er,
+    i.head.appendChild(a);}(window,document,'script','onReady','Viceversa',
+    'https://embed.viceversa.xyz/api.js'));</script>
+
+
+
+    <p><a class="button" href="javascript:void(0)"
+      onclick="document.getElementById('my-viewer-modal').classList.add('vv-modal--opened')">View 3D model</a></p>
+
+    <div id="my-viewer-modal" class="vv-modal">
+
+      <a class="vv-modal-close" href="javascript:void(0)"
+        onclick="this.closest('.vv-modal').classList.remove('vv-modal--opened')" ></a>
+
+      <div class="vv-modal-body">
+        <!-- Use the viewer like any other HTML element --> 
+        <viceversa-viewer item="ab67aa4a88bcfef81dee0202" autorotate aspect-ratio="16:9" mouse="cooperative-silent"></viceversa-viewer>
+      </div>
+
+    </div>
+
+
+
+    <style>
+      .vv-modal {
+        overflow: hidden;
+        z-index: 999999;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        /**
+         * Note: it's important that the viewer dimensions are 0
+         * when the viewer is hidden, so it won't perform 3D 
+         * computations and save performance.
+         */
+        width: 0;
+        height: 0;
+        margin-left: -1000px;
+      }
+      .vv-modal--opened {
+        width: auto;
+        height: auto;
+        margin-left: auto;
+      }
+      .vv-modal-body,
+      .vv-modal-body viceversa-viewer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .vv-modal-close {
+        margin: 10px;
+        width: 36px;
+        height: 36px;
+        display: block;
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-radius: 50%;
+        background-color: #212121;
+        opacity: 0.8;
+        cursor: pointer;
+        pointer-events: all;
+      }
+      .vv-modal-close:hover {
+        opacity: 1;
+      }
+      .vv-modal-close::before,
+      .vv-modal-close::after {
+        content: '';
+        margin: -1px -5px;
+        width: 10px;
+        height: 2px;
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background-color: #fff;
+        transform: rotate(45deg);
+      }
+      .vv-modal-close::after {
+        transform: rotate(-45deg);
+      }
+    </style>
+
+
+
+  </div>
+</body>

@@ -95,83 +95,89 @@
       // Wait for the API to load
       Viceversa.onReady(() => {
 
-      /* -------------------------
-          CONFIG
-      ------------------------- */
-      
-      const ZOOM_CLICK_SPEED = 3 // Zoom speed for 1 click
-      const ZOOM_PRESS_SPEED_PER_SECOND = 15 // Zoom speed while button pressed
+        /* -------------------------
+            CONFIG
+        ------------------------- */
+        
+        const ZOOM_CLICK_SPEED = 3 // Zoom speed for 1 click
+        const ZOOM_PRESS_SPEED_PER_SECOND = 15 // Zoom speed while button pressed
 
-      /* -------------------------
-          DOM + VIEWER
-      ------------------------- */
-      
-      const wrap = document.querySelector('.vv-wrap')
-      const zoom = wrap.querySelector('.vv-zoom')
-      const zoomIn = wrap.querySelector('.vv-zoom-in')
-      const zoomOut = wrap.querySelector('.vv-zoom-out')
-      
-      const viewer = Viceversa.getViewer(wrap)
+        /* -------------------------
+            DOM + VIEWER
+        ------------------------- */
+        
+        const wrap = document.querySelector('.vv-wrap')
+        const zoom = wrap.querySelector('.vv-zoom')
+        const zoomIn = wrap.querySelector('.vv-zoom-in')
+        const zoomOut = wrap.querySelector('.vv-zoom-out')
+        
+        const viewer = Viceversa.getViewer(wrap)
 
-      viewer.on('ready', () => {
-        // Wait for the model to be loaded before showing the buttons
-        zoom.classList.add('vv-zoom--on')
+        viewer.on('ready', () => {
+          // Wait for the model to be loaded before showing the buttons
+          zoom.classList.add('vv-zoom--on')
+        })
+
+        /* -------------------------
+            ZOOM
+        ------------------------- */
+        
+        let zoomDirection = 0 // 0 for no zoom, 1 for zoom in, -1 for zoom out
+        let zoomTimeout = null
+        let zoomLastTime = null
+
+        // Prevent long touch press from opening the context menu
+        zoomIn.addEventListener('contextmenu', (e) => e.preventDefault())
+        zoomOut.addEventListener('contextmenu', (e) => e.preventDefault())
+        // Listen for both mouse and touch press of the buttons (= pointer)
+        zoomIn.addEventListener('pointerdown', (e) => onZoomStart(1))
+        zoomOut.addEventListener('pointerdown', (e) => onZoomStart(-1))
+
+        function onZoomStart(direction) {
+          zoomDirection = direction
+          // Listen for the release of the button
+          window.addEventListener('pointerup', onZoomEnd)
+          window.addEventListener('pointercancel', onZoomEnd)
+          // One big zoom in/out on press
+          viewer.zoomIn(ZOOM_CLICK_SPEED * zoomDirection)
+          // And wait a little before considering the 'button press'
+          if (zoomTimeout) clearTimeout(zoomTimeout)
+          zoomTimeout = setTimeout(() => whileZoomPressed(), 250)
+        }
+
+        function onZoomEnd(event) {
+          // Remove listeners
+          window.removeEventListener('pointerup', onZoomEnd)
+          window.removeEventListener('pointercancel', onZoomEnd)
+          // Stop pending timeout
+          if (zoomTimeout) clearTimeout(zoomTimeout)
+          zoomTimeout = null
+          // Reset vars
+          zoomDirection = 0
+          zoomLastTime = null
+        }
+
+        function whileZoomPressed(time) {
+          if (!zoomDirection) return
+          // Calc the "per second" factor to apply. Important to keep a
+          // constistent behavior on every device refresh rate (60hz, 144hz...)
+          if (zoomLastTime === null) zoomLastTime = time
+          const delta = (time - zoomLastTime) / 1000
+          // If it's a correct number, send it to the viewer
+          if (!isNaN(delta)) viewer.zoomIn(ZOOM_PRESS_SPEED_PER_SECOND * delta * zoomDirection)
+          // Store value + call next frame
+          zoomLastTime = time
+          requestAnimationFrame(whileZoomPressed)
+        }
+
       })
+    </script>
 
-      /* -------------------------
-          ZOOM
-      ------------------------- */
-      
-      let zoomDirection = 0 // 0 for no zoom, 1 for zoom in, -1 for zoom out
-      let zoomTimeout = null
-      let zoomLastTime = null
 
-      // Prevent long touch press from opening the context menu
-      zoomIn.addEventListener('contextmenu', (e) => e.preventDefault())
-      zoomOut.addEventListener('contextmenu', (e) => e.preventDefault())
-      // Listen for both mouse and touch press of the buttons (= pointer)
-      zoomIn.addEventListener('pointerdown', (e) => onZoomStart(1))
-      zoomOut.addEventListener('pointerdown', (e) => onZoomStart(-1))
-
-      function onZoomStart(direction) {
-        zoomDirection = direction
-        // Listen for the release of the button
-        window.addEventListener('pointerup', onZoomEnd)
-        window.addEventListener('pointercancel', onZoomEnd)
-        // One big zoom in/out on press
-        viewer.zoomIn(ZOOM_CLICK_SPEED * zoomDirection)
-        // And wait a little before considering the 'button press'
-        if (zoomTimeout) clearTimeout(zoomTimeout)
-        zoomTimeout = setTimeout(() => whileZoomPressed(), 250)
-      }
-
-      function onZoomEnd(event) {
-        // Remove listeners
-        window.removeEventListener('pointerup', onZoomEnd)
-        window.removeEventListener('pointercancel', onZoomEnd)
-        // Stop pending timeout
-        if (zoomTimeout) clearTimeout(zoomTimeout)
-        zoomTimeout = null
-        // Reset vars
-        zoomDirection = 0
-        zoomLastTime = null
-      }
-
-      function whileZoomPressed(time) {
-        if (!zoomDirection) return
-        // Calc the "per second" factor to apply. Important to keep a
-        // constistent behavior on every device refresh rate (60hz, 144hz...)
-        if (zoomLastTime === null) zoomLastTime = time
-        const delta = (time - zoomLastTime) / 1000
-        // If it's a correct number, send it to the viewer
-        if (!isNaN(delta)) viewer.zoomIn(ZOOM_PRESS_SPEED_PER_SECOND * delta * zoomDirection)
-        // Store value + call next frame
-        zoomLastTime = time
-        requestAnimationFrame(whileZoomPressed)
-      }
-
-    })
-  </script>
+    <div class="comment">
+      <p>By default the viewer interprets mouse wheel events as zoom in/out actions. This can block page scroll when the mouse is over the viewer. Usually not a problem while the model don't take too muck space of the screen, but could be problematic in other cases.</p>
+      <p>Our viewer allows you to disable the default behavior (by adding the <code>mouse="cooperative-silent"</code> attribute) and replace it with custom +/- buttons that control the zoom through the JS API.</p>
+    </div>
 
 
 
