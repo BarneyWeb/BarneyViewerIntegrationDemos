@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+  <title>Force background color - Viceversa</title>
+  <link rel="stylesheet" href="/assets/examples.css">
+</html>
+<body>
+  <div id="example">
+
+
+
+    <!-- Import the Viceversa Viewer component --> 
+    <script>!(function(V,i,c,e,v,er,s,a){s=V[v]||(V[v]={}),s[e]||(s[e]=function(x)
+    {(s[e].l||(s[e].l=[])).push(x);}),a=i.createElement(c),a.async=!0,a.src=er,
+    i.head.appendChild(a);}(window,document,'script','onReady','Viceversa',
+    'https://embed.viceversa.xyz/api.js'));</script>
+
+    <!-- Use the viewer like any other HTML element --> 
+    <viceversa-viewer item="ab67aa4a88bcfef81dee0202" autorotate aspect-ratio="16:9" background-color="#feffa5" thumbnail-style="none"></viceversa-viewer>
+
+
+    
+    <div class="comment">
+      <p>For custom integrations, you can override the background color with <code>background-color="#ddd"</code>.</p>
+      <p>In this case, we recommend hiding the loading image with <code>thumbnail-style="none"</code> to avoid the abrupt background transition between the image and the 3D.</p>
+      <p>&nbsp;</p>
+      <p><strong>Note that normally you should change the scene background color directly on our platform so the loading image is updated too.</strong></p>
+      <p>&nbsp;</p>
+    </div>
+
+
+    
+  </div>
+</body>

@@ -6,9 +6,24 @@ html {
   line-height: 1.4;
   font-family: 'Open Sans', sans-serif;
 }
+
 body {
   margin: 0;
   background-color: #f3f3f3;
+}
+body.special-bg::before {
+  content: '';
+  display: block;
+  width: 120%;
+  padding-bottom: 120%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #feffa5;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  pointer-events: none;
 }
 
 a {
